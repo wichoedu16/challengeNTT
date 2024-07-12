@@ -3,8 +3,6 @@ services:
   bank-app:
     container_name: bank-app
     image: bank-app
-    build:
-      context: .
     networks:
       - internal-network
     environment:
@@ -28,12 +26,12 @@ services:
         '-jar',
         './bank-app-0.0.1-SNAPSHOT.jar',
       ]
-
   mysqldb:
     container_name: mysqldb
     image: mysql:8.0
     networks:
       - internal-network
+    #command: --init-file /data/application/init.sql
     environment:
       - MYSQL_ROOT_PASSWORD=pruebas1
       - MYSQL_USER=user
@@ -42,25 +40,8 @@ services:
     volumes:
       - './data:/var/lib/mysql'
       - .docker/setup.sql:/bankApp/bdd/BaseDatos.sql
-
-  test:
-    container_name: bank-app-test
-    image: bank-app
-    networks:
-      - internal-network
-    environment:
-      - USER_DB=user
-      - PASSWORD_DB=pruebas1
-      - HOST=mysqldb
-    depends_on:
-      - mysqldb
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: mvn test
-
 volumes:
   data:
-
 networks:
   internal-network:
+# docker exec -i mysqldb sh -c 'exec mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD"' < $PWD/script.sql

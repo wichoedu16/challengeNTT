@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-cd app
+cd bankApp
 mvn clean
 mvn package
 docker build -t bank-app .
