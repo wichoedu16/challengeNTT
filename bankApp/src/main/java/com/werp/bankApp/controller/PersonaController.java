@@ -3,7 +3,6 @@ package com.werp.bankApp.controller;
 
 import com.werp.bankApp.entity.Persona;
 import com.werp.bankApp.service.PersonaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,11 @@ import java.util.List;
 @RequestMapping("/personas")
 public class PersonaController {
 
-    @Autowired
-    private PersonaService personaService;
+    private final PersonaService personaService;
+
+    public PersonaController(PersonaService personaService) {
+        this.personaService = personaService;
+    }
 
     @GetMapping("")
     public ResponseEntity<List<Persona>> getAll() {

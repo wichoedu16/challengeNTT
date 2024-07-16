@@ -1,51 +1,44 @@
 package com.werp.bankApp.controller;
 
 import com.werp.bankApp.entity.Cliente;
+import com.werp.bankApp.response.ClienteResponseRest;
 import com.werp.bankApp.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    @Autowired
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
+
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
 
     @GetMapping("")
-    public ResponseEntity<List<Cliente>> getAll() {
-        List<Cliente> clientes = clienteService.getAll();
-        return ResponseEntity.ok(clientes);
+    public ResponseEntity<ClienteResponseRest> getAll() {
+        return clienteService.getAll();
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<Cliente> getById(@PathVariable Long id) {
-        Cliente cliente = clienteService.getById(id);
-        return ResponseEntity.ok(cliente);
+    public ResponseEntity<ClienteResponseRest> getById(@PathVariable Long id) {
+        return clienteService.getById(id);
     }
 
-    @ResponseStatus(value = HttpStatus.CREATED, reason = "Creado exitosamente")
     @PostMapping("")
-    public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {
-        Cliente clienteGuardado = clienteService.create(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteGuardado);
+    public ResponseEntity<ClienteResponseRest> create(@RequestBody Cliente cliente) {
+        return clienteService.create(cliente);
     }
 
-    @ResponseStatus(value = HttpStatus.OK, reason = "Actualizado exitosamente")
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> update(@PathVariable Long id, @RequestBody Cliente cliente) {
-        Cliente clienteEditado = clienteService.update(id, cliente);
-        return ResponseEntity.status(HttpStatus.OK).body(clienteEditado);
+    public ResponseEntity<ClienteResponseRest> update(@PathVariable Long id, @RequestBody Cliente cliente) {
+        return clienteService.update(id, cliente);
     }
 
-    @ResponseStatus(value = HttpStatus.OK, reason = "Eliminado exitosamente")
     @DeleteMapping("/{id}")
-    void delete(@PathVariable Long id){
-        clienteService.delete(id);
+    public ResponseEntity<ClienteResponseRest> delete(@PathVariable Long id) {
+        return clienteService.delete(id);
     }
 }
